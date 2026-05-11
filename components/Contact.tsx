@@ -8,30 +8,97 @@ import {
 } from "framer-motion";
 
 export default function Contact() {
+
   const [contactType, setContactType] =
     useState("whatsapp");
 
   const [success, setSuccess] =
     useState(false);
 
+  /* ================= FORM ================= */
+
+  const [formData, setFormData] =
+    useState({
+      nombre: "",
+      email: "",
+      prefijo: "+51",
+      telefono: "",
+      requerimiento: "",
+    });
+
+  /* ================= ERRORS ================= */
+
+  const [errors, setErrors] =
+    useState<any>({});
+
+  /* ================= VALIDATION ================= */
+
+  const validate = () => {
+
+    const newErrors: any = {};
+
+    if (
+      formData.nombre.trim().length < 3
+    ) {
+      newErrors.nombre =
+        "Ingresa un nombre válido";
+    }
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !emailRegex.test(formData.email)
+    ) {
+      newErrors.email =
+        "Ingresa un correo válido";
+    }
+
+    if (
+      formData.telefono.trim().length < 6
+    ) {
+      newErrors.telefono =
+        "Ingresa un teléfono válido";
+    }
+
+    if (
+      formData.requerimiento.trim()
+        .length < 10
+    ) {
+      newErrors.requerimiento =
+        "Cuéntanos un poco más sobre tu proyecto";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors)
+      .length === 0;
+  };
+
+  /* ================= SUBMIT ================= */
+
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
+
     e.preventDefault();
 
-    const form = e.currentTarget;
+    const isValid = validate();
 
-    const formData = new FormData(form);
+    if (!isValid) return;
 
     const data = {
-      nombre: formData.get("nombre"),
-      email: formData.get("email"),
-      telefono: formData.get("telefono"),
-      requerimiento: formData.get("requerimiento"),
+      nombre: formData.nombre,
+      email: formData.email,
+      telefono:
+        `${formData.prefijo} ${formData.telefono}`,
+      requerimiento:
+        formData.requerimiento,
       metodo: contactType,
     };
 
     try {
+
       const response = await fetch(
         "/api/contact",
         {
@@ -50,21 +117,30 @@ export default function Contact() {
         await response.json();
 
       if (result.success) {
+
         setSuccess(true);
 
-        form.reset();
+        setFormData({
+          nombre: "",
+          email: "",
+          prefijo: "+51",
+          telefono: "",
+          requerimiento: "",
+        });
 
         setTimeout(() => {
           window.location.href = "/";
         }, 3000);
 
       } else {
+
         alert(
           "Ocurrió un error enviando el formulario."
         );
       }
 
     } catch (error) {
+
       console.log(error);
 
       alert(
@@ -76,6 +152,7 @@ export default function Contact() {
   return (
     <>
       {/* SUCCESS MODAL */}
+
       <AnimatePresence>
         {success && (
           <motion.div
@@ -106,7 +183,6 @@ export default function Contact() {
                 duration: 0.45,
               }}
             >
-              {/* GIF */}
               <div className="success-icon">
                 <img
                   src="/success.gif"
@@ -128,10 +204,13 @@ export default function Contact() {
         )}
       </AnimatePresence>
 
+      {/* SECTION */}
+
       <section className="contact-section">
         <div className="contact-container">
 
-          {/* TOP BAR */}
+          {/* TOP */}
+
           <div
             style={{
               display: "flex",
@@ -143,20 +222,24 @@ export default function Contact() {
               flexWrap: "wrap",
             }}
           >
-            {/* BACK BUTTON */}
+
             <Link
               href="/"
               className="back-home-button"
             >
               <span>←</span>
+
               <span>
                 Volver al inicio
               </span>
             </Link>
+
           </div>
 
           {/* HEADER */}
+
           <div className="contact-header">
+
             <h2>
               Hablemos de tu proyecto
             </h2>
@@ -168,86 +251,227 @@ export default function Contact() {
               estratégica y enfocada
               en resultados.
             </p>
+
           </div>
 
           {/* FORM */}
+
           <form
             onSubmit={handleSubmit}
             className="contact-form"
           >
 
-            {/* TOP */}
+            {/* TOP GRID */}
+
             <div className="contact-grid">
 
+              {/* NOMBRE */}
+
               <div className="input-group">
+
                 <input
                   type="text"
-                  name="nombre"
-                  required
                   placeholder=" "
+                  value={formData.nombre}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      nombre:
+                        e.target.value,
+                    })
+                  }
+                  className={
+                    errors.nombre
+                      ? "input-error"
+                      : ""
+                  }
                 />
 
                 <label>
                   Nombre
                 </label>
+
+                {errors.nombre && (
+                  <span className="error-text">
+                    {errors.nombre}
+                  </span>
+                )}
+
               </div>
 
+              {/* EMAIL */}
+
               <div className="input-group">
+
                 <input
                   type="email"
-                  name="email"
-                  required
                   placeholder=" "
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      email:
+                        e.target.value,
+                    })
+                  }
+                  className={
+                    errors.email
+                      ? "input-error"
+                      : ""
+                  }
                 />
 
                 <label>
                   Email
                 </label>
+
+                {errors.email && (
+                  <span className="error-text">
+                    {errors.email}
+                  </span>
+                )}
+
               </div>
 
             </div>
 
             {/* PHONE */}
-            <div className="input-group full">
-              <input
-                type="text"
-                name="telefono"
-                required
-                placeholder=" "
-              />
 
-              <label>
-                Teléfono
-              </label>
+            <div className="phone-wrapper">
+
+              {/* PREFIX */}
+
+              <div className="prefix-select">
+
+                <select
+                  value={
+                    formData.prefijo
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      prefijo:
+                        e.target.value,
+                    })
+                  }
+                >
+                  <option value="+51">
+                    🇵🇪 +51
+                  </option>
+
+                  <option value="+52">
+                    🇲🇽 +52
+                  </option>
+
+                  <option value="+57">
+                    🇨🇴 +57
+                  </option>
+
+                  <option value="+54">
+                    🇦🇷 +54
+                  </option>
+
+                  <option value="+1">
+                    🇺🇸 +1
+                  </option>
+
+                  <option value="+34">
+                    🇪🇸 +34
+                  </option>
+                </select>
+
+              </div>
+
+              {/* PHONE INPUT */}
+
+              <div className="input-group full">
+
+                <input
+                  type="text"
+                  placeholder=" "
+                  value={
+                    formData.telefono
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      telefono:
+                        e.target.value,
+                    })
+                  }
+                  className={
+                    errors.telefono
+                      ? "input-error"
+                      : ""
+                  }
+                />
+
+                <label>
+                  Teléfono
+                </label>
+
+                {errors.telefono && (
+                  <span className="error-text">
+                    {errors.telefono}
+                  </span>
+                )}
+
+              </div>
+
             </div>
 
             {/* MESSAGE */}
+
             <div className="input-group full textarea-group">
+
               <textarea
-                name="requerimiento"
-                required
                 placeholder=" "
+                value={
+                  formData.requerimiento
+                }
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    requerimiento:
+                      e.target.value,
+                  })
+                }
+                className={
+                  errors.requerimiento
+                    ? "input-error"
+                    : ""
+                }
               />
 
               <label>
                 Requerimiento
               </label>
+
+              {errors.requerimiento && (
+                <span className="error-text">
+                  {
+                    errors.requerimiento
+                  }
+                </span>
+              )}
+
             </div>
 
-            {/* CONTACT TYPE */}
+            {/* METHODS */}
+
             <div className="contact-methods">
 
               <h4>
-                ¿Cómo te gustaría que nos contactáramos?
+                ¿Cómo te gustaría que
+                nos contactáramos?
               </h4>
 
               <div className="methods-grid">
 
-                {/* LLAMADA */}
                 <label className="method-item">
+
                   <input
                     type="radio"
-                    name="contacto"
                     checked={
                       contactType ===
                       "llamada"
@@ -264,13 +488,13 @@ export default function Contact() {
                   <span>
                     Llamada
                   </span>
+
                 </label>
 
-                {/* CORREO */}
                 <label className="method-item">
+
                   <input
                     type="radio"
-                    name="contacto"
                     checked={
                       contactType ===
                       "correo"
@@ -287,13 +511,13 @@ export default function Contact() {
                   <span>
                     Correo
                   </span>
+
                 </label>
 
-                {/* WHATSAPP */}
                 <label className="method-item">
+
                   <input
                     type="radio"
-                    name="contacto"
                     checked={
                       contactType ===
                       "whatsapp"
@@ -310,19 +534,23 @@ export default function Contact() {
                   <span>
                     Whatsapp
                   </span>
+
                 </label>
 
               </div>
             </div>
 
             {/* BUTTON */}
+
             <div className="contact-button-wrapper">
+
               <button
                 type="submit"
                 className="contact-button"
               >
                 Enviar Mensaje
               </button>
+
             </div>
 
           </form>

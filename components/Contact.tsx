@@ -7,6 +7,10 @@ import {
   motion,
 } from "framer-motion";
 
+import {
+  PhoneInput,
+} from "react-international-phone";
+
 export default function Contact() {
 
   const [contactType, setContactType] =
@@ -25,6 +29,11 @@ export default function Contact() {
       telefono: "",
       requerimiento: "",
     });
+
+  /* ================= PHONE ================= */
+
+  const [phone, setPhone] =
+    useState("");
 
   /* ================= ERRORS ================= */
 
@@ -54,8 +63,12 @@ export default function Contact() {
         "Ingresa un correo válido";
     }
 
+    const phoneLength =
+      phone.replace(/\D/g, "")
+        .length;
+
     if (
-      formData.telefono.trim().length < 6
+      phoneLength < 6
     ) {
       newErrors.telefono =
         "Ingresa un teléfono válido";
@@ -90,8 +103,7 @@ export default function Contact() {
     const data = {
       nombre: formData.nombre,
       email: formData.email,
-      telefono:
-        `${formData.prefijo} ${formData.telefono}`,
+      telefono: phone,
       requerimiento:
         formData.requerimiento,
       metodo: contactType,
@@ -127,6 +139,8 @@ export default function Contact() {
           telefono: "",
           requerimiento: "",
         });
+
+        setPhone("");
 
         setTimeout(() => {
           window.location.href = "/";
@@ -337,86 +351,42 @@ export default function Contact() {
 
             {/* PHONE */}
 
-            <div className="phone-wrapper">
+            <div className="phone-modern">
 
-              {/* PREFIX */}
+              <PhoneInput
+                defaultCountry="pe"
+                value={phone}
+                onChange={(phone) => {
 
-              <div className="prefix-select">
+                  /* SOLO NÚMEROS */
 
-                <select
-                  value={
-                    formData.prefijo
+                  const cleaned =
+                    phone.replace(
+                      /[^\d+]/g,
+                      ""
+                    );
+
+                  setPhone(cleaned);
+
+                  if (errors.telefono) {
+                    setErrors({
+                      ...errors,
+                      telefono: "",
+                    });
                   }
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      prefijo:
-                        e.target.value,
-                    })
-                  }
-                >
-                  <option value="+51">
-                    🇵🇪 +51
-                  </option>
+                }}
+                inputClassName={
+                  errors.telefono
+                    ? "phone-error"
+                    : ""
+                }
+              />
 
-                  <option value="+52">
-                    🇲🇽 +52
-                  </option>
-
-                  <option value="+57">
-                    🇨🇴 +57
-                  </option>
-
-                  <option value="+54">
-                    🇦🇷 +54
-                  </option>
-
-                  <option value="+1">
-                    🇺🇸 +1
-                  </option>
-
-                  <option value="+34">
-                    🇪🇸 +34
-                  </option>
-                </select>
-
-              </div>
-
-              {/* PHONE INPUT */}
-
-              <div className="input-group full">
-
-                <input
-                  type="text"
-                  placeholder=" "
-                  value={
-                    formData.telefono
-                  }
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      telefono:
-                        e.target.value,
-                    })
-                  }
-                  className={
-                    errors.telefono
-                      ? "input-error"
-                      : ""
-                  }
-                />
-
-                <label>
-                  Teléfono
-                </label>
-
-                {errors.telefono && (
-                  <span className="error-text">
-                    {errors.telefono}
-                  </span>
-                )}
-
-              </div>
+              {errors.telefono && (
+                <span className="error-text">
+                  {errors.telefono}
+                </span>
+              )}
 
             </div>
 

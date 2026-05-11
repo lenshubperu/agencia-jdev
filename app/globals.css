@@ -1,3 +1,4 @@
+@import "react-international-phone/style.css";
 @import "tailwindcss";
 
 * {
@@ -1597,5 +1598,73 @@ img {
     font-size: 14px;
 
     line-height: 1.7;
+  }
+}
+/* PHONE */
+
+.phone-modern {
+  margin-bottom: 55px;
+}
+
+.react-international-phone-input-container {
+  width: 100%;
+}
+
+.react-international-phone-country-selector-button {
+  height: 64px !important;
+
+  background: transparent !important;
+
+  border: none !important;
+
+  border-bottom: 2px solid #111 !important;
+
+  padding-left: 0 !important;
+}
+
+.react-international-phone-input {
+  width: 100% !important;
+
+  height: 64px !important;
+
+  background: transparent !important;
+
+  border: none !important;
+  border-bottom: 2px solid #111 !important;
+
+  color: #000 !important;
+
+  font-size: 20px !important;
+
+  padding-left: 18px !important;
+
+  outline: none !important;
+}
+
+.react-international-phone-input:focus {
+  border-bottom-color: #00f5b0 !important;
+}
+
+.phone-error {
+  border-bottom-color:
+    #ff4d4f !important;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+  .phone-modern {
+    margin-bottom: 34px;
+  }
+
+  .react-international-phone-input {
+    height: 56px !important;
+
+    font-size: 16px !important;
+  }
+
+  .react-international-phone-country-selector-button {
+    height: 56px !important;
   }
 }

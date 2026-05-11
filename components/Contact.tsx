@@ -20,44 +20,43 @@ export default function Contact() {
       email: formData.get("email"),
       telefono: formData.get("telefono"),
       requerimiento: formData.get("requerimiento"),
-      contacto: contactType,
+      metodo: contactType,
     };
 
-    /* ========= EMAIL ========= */
-
     try {
-      await fetch("/api/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify(data),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(
+          "Gracias por contactarnos. Nuestro equipo se comunicará contigo pronto."
+        );
+
+        form.reset();
+
+        window.location.href = "/";
+      } else {
+        alert(
+          "Ocurrió un error enviando el formulario."
+        );
+      }
+
     } catch (error) {
       console.log(error);
+
+      alert(
+        "Ocurrió un error enviando el formulario."
+      );
     }
-
-    /* ========= WHATSAPP ========= */
-
-    const message = `
-Hola Agencia JDev 👋
-
-*Nombre:* ${data.nombre}
-*Email:* ${data.email}
-*Teléfono:* ${data.telefono}
-
-*Requerimiento:*
-${data.requerimiento}
-
-*Preferencia de contacto:* ${data.contacto}
-`;
-
-    window.open(
-      `https://wa.me/51929391656?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
-
-    form.reset();
   };
 
   return (

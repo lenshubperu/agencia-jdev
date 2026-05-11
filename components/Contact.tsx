@@ -2,9 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
 
 export default function Contact() {
-  const [contactType, setContactType] = useState("whatsapp");
+  const [contactType, setContactType] =
+    useState("whatsapp");
+
+  const [success, setSuccess] =
+    useState(false);
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -24,26 +32,32 @@ export default function Contact() {
     };
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
+      const response = await fetch(
+        "/api/contact",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
 
-        body: JSON.stringify(data),
-      });
+          body: JSON.stringify(data),
+        }
+      );
 
-      const result = await response.json();
+      const result =
+        await response.json();
 
       if (result.success) {
-        alert(
-          "Gracias por contactarnos. Nuestro equipo se comunicará contigo pronto."
-        );
+        setSuccess(true);
 
         form.reset();
 
-        window.location.href = "/";
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 3000);
+
       } else {
         alert(
           "Ocurrió un error enviando el formulario."
@@ -60,162 +74,260 @@ export default function Contact() {
   };
 
   return (
-    <section className="contact-section">
-      <div className="contact-container">
-
-        {/* TOP BAR */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "40px",
-            gap: "20px",
-            flexWrap: "wrap",
-          }}
-        >
-          {/* BACK BUTTON */}
-          <Link
-            href="/"
-            className="back-home-button"
+    <>
+      {/* SUCCESS MODAL */}
+      <AnimatePresence>
+        {success && (
+          <motion.div
+            className="success-modal"
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
           >
-            <span>←</span>
-            <span>Volver al inicio</span>
-          </Link>
-        </div>
+            <motion.div
+              className="success-box"
+              initial={{
+                scale: 0.8,
+                opacity: 0,
+                y: 40,
+              }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.45,
+              }}
+            >
+              {/* GIF */}
+              <div className="success-icon">
+                <img
+                  src="/success.gif"
+                  alt="success"
+                />
+              </div>
 
-        {/* HEADER */}
-        <div className="contact-header">
-          <h2>Hablemos de tu proyecto</h2>
+              <h3>
+                Mensaje enviado
+              </h3>
 
-          <p>
-            Cuéntanos tu idea y construyamos una experiencia
-            digital moderna, estratégica y enfocada en resultados.
-          </p>
-        </div>
+              <p>
+                Gracias por contactarnos.
+                Nuestro equipo se comunicará
+                contigo muy pronto.
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* FORM */}
-        <form
-          onSubmit={handleSubmit}
-          className="contact-form"
-        >
+      <section className="contact-section">
+        <div className="contact-container">
 
-          {/* TOP */}
-          <div className="contact-grid">
-            <div className="input-group">
+          {/* TOP BAR */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent:
+                "space-between",
+              alignItems: "center",
+              marginBottom: "40px",
+              gap: "20px",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* BACK BUTTON */}
+            <Link
+              href="/"
+              className="back-home-button"
+            >
+              <span>←</span>
+              <span>
+                Volver al inicio
+              </span>
+            </Link>
+          </div>
+
+          {/* HEADER */}
+          <div className="contact-header">
+            <h2>
+              Hablemos de tu proyecto
+            </h2>
+
+            <p>
+              Cuéntanos tu idea y
+              construyamos una experiencia
+              digital moderna,
+              estratégica y enfocada
+              en resultados.
+            </p>
+          </div>
+
+          {/* FORM */}
+          <form
+            onSubmit={handleSubmit}
+            className="contact-form"
+          >
+
+            {/* TOP */}
+            <div className="contact-grid">
+
+              <div className="input-group">
+                <input
+                  type="text"
+                  name="nombre"
+                  required
+                  placeholder=" "
+                />
+
+                <label>
+                  Nombre
+                </label>
+              </div>
+
+              <div className="input-group">
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder=" "
+                />
+
+                <label>
+                  Email
+                </label>
+              </div>
+
+            </div>
+
+            {/* PHONE */}
+            <div className="input-group full">
               <input
                 type="text"
-                name="nombre"
+                name="telefono"
                 required
                 placeholder=" "
               />
 
-              <label>Nombre</label>
+              <label>
+                Teléfono
+              </label>
             </div>
 
-            <div className="input-group">
-              <input
-                type="email"
-                name="email"
+            {/* MESSAGE */}
+            <div className="input-group full textarea-group">
+              <textarea
+                name="requerimiento"
                 required
                 placeholder=" "
               />
 
-              <label>Email</label>
+              <label>
+                Requerimiento
+              </label>
             </div>
-          </div>
 
-          {/* PHONE */}
-          <div className="input-group full">
-            <input
-              type="text"
-              name="telefono"
-              required
-              placeholder=" "
-            />
+            {/* CONTACT TYPE */}
+            <div className="contact-methods">
 
-            <label>Teléfono</label>
-          </div>
+              <h4>
+                ¿Cómo te gustaría que nos contactáramos?
+              </h4>
 
-          {/* MESSAGE */}
-          <div className="input-group full textarea-group">
-            <textarea
-              name="requerimiento"
-              required
-              placeholder=" "
-            />
+              <div className="methods-grid">
 
-            <label>Requerimiento</label>
-          </div>
+                {/* LLAMADA */}
+                <label className="method-item">
+                  <input
+                    type="radio"
+                    name="contacto"
+                    checked={
+                      contactType ===
+                      "llamada"
+                    }
+                    onChange={() =>
+                      setContactType(
+                        "llamada"
+                      )
+                    }
+                  />
 
-          {/* CONTACT TYPE */}
-          <div className="contact-methods">
-            <h4>
-              ¿Cómo te gustaría que nos contactáramos?
-            </h4>
+                  <span className="custom-radio"></span>
 
-            <div className="methods-grid">
+                  <span>
+                    Llamada
+                  </span>
+                </label>
 
-              <label className="method-item">
-                <input
-                  type="radio"
-                  name="contacto"
-                  checked={contactType === "llamada"}
-                  onChange={() =>
-                    setContactType("llamada")
-                  }
-                />
+                {/* CORREO */}
+                <label className="method-item">
+                  <input
+                    type="radio"
+                    name="contacto"
+                    checked={
+                      contactType ===
+                      "correo"
+                    }
+                    onChange={() =>
+                      setContactType(
+                        "correo"
+                      )
+                    }
+                  />
 
-                <span className="custom-radio"></span>
+                  <span className="custom-radio"></span>
 
-                <span>Llamada</span>
-              </label>
+                  <span>
+                    Correo
+                  </span>
+                </label>
 
-              <label className="method-item">
-                <input
-                  type="radio"
-                  name="contacto"
-                  checked={contactType === "correo"}
-                  onChange={() =>
-                    setContactType("correo")
-                  }
-                />
+                {/* WHATSAPP */}
+                <label className="method-item">
+                  <input
+                    type="radio"
+                    name="contacto"
+                    checked={
+                      contactType ===
+                      "whatsapp"
+                    }
+                    onChange={() =>
+                      setContactType(
+                        "whatsapp"
+                      )
+                    }
+                  />
 
-                <span className="custom-radio"></span>
+                  <span className="custom-radio"></span>
 
-                <span>Correo</span>
-              </label>
+                  <span>
+                    Whatsapp
+                  </span>
+                </label>
 
-              <label className="method-item">
-                <input
-                  type="radio"
-                  name="contacto"
-                  checked={contactType === "whatsapp"}
-                  onChange={() =>
-                    setContactType("whatsapp")
-                  }
-                />
-
-                <span className="custom-radio"></span>
-
-                <span>Whatsapp</span>
-              </label>
-
+              </div>
             </div>
-          </div>
 
-          {/* BUTTON */}
-          <div className="contact-button-wrapper">
-            <button
-              type="submit"
-              className="contact-button"
-            >
-              Enviar Mensaje
-            </button>
-          </div>
+            {/* BUTTON */}
+            <div className="contact-button-wrapper">
+              <button
+                type="submit"
+                className="contact-button"
+              >
+                Enviar Mensaje
+              </button>
+            </div>
 
-        </form>
-      </div>
-    </section>
+          </form>
+        </div>
+      </section>
+    </>
   );
 }

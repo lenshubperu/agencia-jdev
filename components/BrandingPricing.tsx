@@ -1,6 +1,13 @@
 "use client";
 
-export default function BrandingPricing() {
+/* PROPS */
+interface BrandingPricingProps {
+  workana?: boolean;
+}
+
+export default function BrandingPricing({
+  workana = false,
+}: BrandingPricingProps) {
   return (
     <section className="pricing-section">
       <div className="pricing-container">
@@ -39,14 +46,16 @@ export default function BrandingPricing() {
               <li>Manual de marca básico</li>
             </ul>
 
-            <a
-              href="https://wa.me/51999999999"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pricing-button"
-            >
-              Solicitar
-            </a>
+            {!workana && (
+              <a
+                href="https://wa.me/51929391656"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pricing-button"
+              >
+                Solicitar
+              </a>
+            )}
           </div>
 
           {/* CARD 2 */}
@@ -76,14 +85,16 @@ export default function BrandingPricing() {
               <li>Diseño de página web</li>
             </ul>
 
-            <a
-              href="https://wa.me/51999999999"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pricing-button"
-            >
-              Solicitar
-            </a>
+            {!workana && (
+              <a
+                href="https://wa.me/51929391656"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pricing-button"
+              >
+                Solicitar
+              </a>
+            )}
           </div>
 
           {/* CARD 3 */}
@@ -114,14 +125,16 @@ export default function BrandingPricing() {
               <li>Diseño de página web</li>
             </ul>
 
-            <a
-              href="https://wa.me/51999999999"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pricing-button"
-            >
-              Solicitar
-            </a>
+            {!workana && (
+              <a
+                href="https://wa.me/51929391656"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pricing-button"
+              >
+                Solicitar
+              </a>
+            )}
           </div>
 
         </div>

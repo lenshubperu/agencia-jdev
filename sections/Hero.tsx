@@ -26,7 +26,14 @@ const words = [
 const whatsappLink =
   "https://wa.me/51929391656?text=Hola,%20necesito%20información%20sobre%20uno%20de%20sus%20planes";
 
-export default function Hero() {
+/* PROPS */
+interface HeroProps {
+  workana?: boolean;
+}
+
+export default function Hero({
+  workana = false,
+}: HeroProps) {
   const [currentWord, setCurrentWord] = useState(0);
 
   useEffect(() => {
@@ -163,34 +170,38 @@ export default function Hero() {
             </a>
 
             {/* CONTACTO */}
-            <Link
-              href="/contacto"
-              className="
-                hover:text-[#00F5B0]
-                transition-all
-                duration-300
-              "
-            >
-              Contacto
-            </Link>
+            {!workana && (
+              <Link
+                href="/contacto"
+                className="
+                  hover:text-[#00F5B0]
+                  transition-all
+                  duration-300
+                "
+              >
+                Contacto
+              </Link>
+            )}
           </nav>
 
           {/* BUTTON DESKTOP */}
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              neo-button
-              hidden
-              md:flex
+          {!workana && (
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                neo-button
+                hidden
+                md:flex
 
-              items-center
-              justify-center
-            "
-          >
-            Cotiza ahora
-          </a>
+                items-center
+                justify-center
+              "
+            >
+              Cotiza ahora
+            </a>
+          )}
         </div>
       </header>
 
@@ -322,24 +333,26 @@ export default function Hero() {
             </p>
 
             {/* BUTTON MOBILE */}
-            <div className="mt-8 flex justify-center">
-              <Link
-                href="/contacto"
-                className="
-                  neo-button
+            {!workana && (
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href="/contacto"
+                  className="
+                    neo-button
 
-                  text-[15px]
-                  px-7
-                  py-3
+                    text-[15px]
+                    px-7
+                    py-3
 
-                  flex
-                  items-center
-                  justify-center
-                "
-              >
-                Cotiza ahora
-              </Link>
-            </div>
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  Cotiza ahora
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
@@ -474,21 +487,23 @@ export default function Hero() {
                 </p>
 
                 {/* BUTTON DESKTOP */}
-                <div className="flex mt-10">
-                  <a
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="
-                      neo-button
-                      flex
-                      items-center
-                      justify-center
-                    "
-                  >
-                    Cotiza ahora
-                  </a>
-                </div>
+                {!workana && (
+                  <div className="flex mt-10">
+                    <a
+                      href={whatsappLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
+                        neo-button
+                        flex
+                        items-center
+                        justify-center
+                      "
+                    >
+                      Cotiza ahora
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 

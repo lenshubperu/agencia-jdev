@@ -14,7 +14,7 @@ export default function Pricing({
 
         {/* TITLE */}
         <div className="pricing-header">
-          <h2>Planes Web</h2>
+          <h2>Planes Web Profesionales</h2>
         </div>
 
         {/* CARDS */}

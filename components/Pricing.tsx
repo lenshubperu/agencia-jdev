@@ -8,6 +8,9 @@ interface PricingProps {
 export default function Pricing({
   workana = false,
 }: PricingProps) {
+
+  console.log("WORKANA:", workana);
+
   return (
     <section className="pricing-section">
       <div className="pricing-container">

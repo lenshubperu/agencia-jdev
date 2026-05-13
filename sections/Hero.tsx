@@ -34,6 +34,9 @@ interface HeroProps {
 export default function Hero({
   workana = false,
 }: HeroProps) {
+
+  console.log("HERO WORKANA:", workana);
+
   const [currentWord, setCurrentWord] = useState(0);
 
   useEffect(() => {
@@ -572,11 +575,11 @@ export default function Hero({
 
       {/* ================= PRICING ================= */}
       <div id="pricing">
-        <Pricing />
+        <Pricing workana={workana} />
       </div>
 
       {/* ================= BRANDING PRICING ================= */}
-      <BrandingPricing />
+      <BrandingPricing workana={workana} />
 
       {/* ================= CLIENTS ================= */}
       <Clients />
